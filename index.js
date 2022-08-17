@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const port = 3000
+var data = require('./data/test.json'); // retrieves information from the current folder 
 
 app.set('view engine', 'ejs')
 //this will allow us to serve up static files, CSS, images & JS
@@ -61,10 +62,33 @@ app.get('/fallout4', (req, res) => {
    });//routes to pages
 })
 
+app.get('/users', (req, res) => {
+  var title = 'My Users Page';
+  var heading = 'The Fallout Franchise';
+   res.render('users/index',{
+     'title':title,
+     'heading':heading,
+     'users':data //refers to var = data, passes info into the users file
+   });//routes to pages
+})
+
+//add user/view route - we are cheating by using the array index - 1
+app.get('/users/view/:id', function(req, res) {
+ var title = 'User Page';
+ var id = req.params.id;
+ var heading = "Fallout Franchise";
+ res.render('users/view', {
+     title: title,
+     'heading': heading,
+     user: data[--id]
+ });
+});
+
 
 
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
+  console.log(data);
 })
 
